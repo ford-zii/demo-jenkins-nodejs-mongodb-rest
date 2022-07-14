@@ -1,6 +1,6 @@
 pipeline {
 
-    agent any
+    agent none
 
     environment {
         image = "shissanupong/demo-nodejs"
@@ -46,6 +46,16 @@ pipeline {
 				sh 'docker build -t shissanupong/demo-nodejs:latest .'
 			}
 		}
+
+        stage('Docker Push') {
+            agent any
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'dockerhub', passwordVariable: 'dockerhubPassword', usernameVariable: 'dockerhubUser')]) {
+                sh "docker login -u ${env.dockerhubUser} -p ${env.dockerhubPassword}"
+                sh 'docker push shissanupong/demo-nodejs:latest'
+                }
+            }
+    }
 
 
         stage('Deployment'){
