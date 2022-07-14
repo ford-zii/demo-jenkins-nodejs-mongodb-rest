@@ -29,17 +29,24 @@ pipeline {
         //     }
         // }
         
-        stage('Build docker image') {
-            steps {
-                script {
-                    docker.withRegistry('', registryCredential) {
-                        def slackImage = docker.build("${env.image}:${BUILD_NUMBER}")
-                        slackImage.push()
-                        slackImage.push('latest')
-                    }
-                }
-            }
-        }
+        // stage('Build docker image') {
+        //     steps {
+        //         script {
+        //             docker.withRegistry('', registryCredential) {
+        //                 def slackImage = docker.build("${env.image}:${BUILD_NUMBER}")
+        //                 slackImage.push()
+        //                 slackImage.push('latest')
+        //             }
+        //         }
+        //     }
+        // }
+        stage('Build') {
+
+			steps {
+				sh 'docker build -t shissanupong/demo-nodejs:latest .'
+			}
+		}
+
 
         stage('Deployment'){
             steps {
