@@ -5,7 +5,7 @@ pipeline {
     environment {
         image = "shissanupong/demo-nodejs"
         registry = "docker.io"
-        registryCredential = 'my_docker'
+        registryCredential = 'dockerhub'
     }
 
     stages {
@@ -29,33 +29,33 @@ pipeline {
         //     }
         // }
         
-        // stage('Build docker image') {
-        //     steps {
-        //         script {
-        //             docker.withRegistry('', registryCredential) {
-        //                 def slackImage = docker.build("${env.image}:${BUILD_NUMBER}")
-        //                 slackImage.push()
-        //                 slackImage.push('latest')
-        //             }
-        //         }
-        //     }
-        // }
-        stage('Build') {
-
-			steps {
-				sh 'docker build -t shissanupong/demo-nodejs:latest .'
-			}
-		}
-
-        stage('Docker Push') {
-            agent any
+        stage('Build docker image') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'dockerhub', passwordVariable: 'dockerhubPassword', usernameVariable: 'dockerhubUser')]) {
-                sh "docker login -u ${env.dockerhubUser} -p ${env.dockerhubPassword}"
-                sh 'docker push shissanupong/demo-nodejs:latest'
+                script {
+                    docker.withRegistry('', registryCredential) {
+                        def slackImage = docker.build("${env.image}:${BUILD_NUMBER}")
+                        slackImage.push()
+                        slackImage.push('latest')
+                    }
                 }
             }
-    }
+        }
+        // stage('Build') {
+
+		// 	steps {
+		// 		sh 'docker build -t shissanupong/demo-nodejs:latest .'
+		// 	}
+		// }
+
+    //     stage('Docker Push') {
+    //         agent any
+    //         steps {
+    //             withCredentials([usernamePassword(credentialsId: 'dockerhub', passwordVariable: 'dockerhubPassword', usernameVariable: 'dockerhubUser')]) {
+    //             sh "docker login -u ${env.dockerhubUser} -p ${env.dockerhubPassword}"
+    //             sh 'docker push shissanupong/demo-nodejs:latest'
+    //             }
+    //         }
+    // }
 
 
         stage('Deployment'){
