@@ -1,6 +1,6 @@
 FROM node:latest
 
-MAINTAINER atisak.k@gmail.com
+MAINTAINER shissanupong@outlook.com
 #update 
 RUN apt-get update && apt-get dist-upgrade -y \
     && rm -rf /var/lib/apt/lists/*
