@@ -5,7 +5,7 @@ pipeline {
     environment {
         image = "shissanupong/demo-nodejs"
         registry = "docker.io"
-        registryCredential = 'dockerhub'
+        registryCredential = 'dockerHub'
     }
 
     stages {
